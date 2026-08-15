@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="resufy — Buat CV yang lolos ATS, cek plagiarisme dokumen, dan pakai toolbox gratis (compress, convert, scanner). Cek gratis, bayar Rp2.000 hanya saat unduh PDF berkualitas tinggi."
+    />
+    <meta name="theme-color" content="#2563EB" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:site_name" content="resufy" />
+    <meta
+      property="og:title"
+      content="resufy — CV ATS, Cek Plagiarisme & Toolbox Gratis"
+    />
+    <meta
+      property="og:description"
+      content="Buat CV yang lolos ATS, cek plagiarisme dokumen, dan pakai toolbox gratis (compress, convert, scanner). Bayar Rp2.000 hanya saat unduh PDF berkualitas tinggi."
+    />
+    <!-- ============================================================
+         FASE 09 SEO — canonical + Open Graph lengkap + Twitter Card.
+         SEMUA URL memakai placeholder https://resufy.app — WAJIB ganti
+         dengan domain final saat deploy (lihat memory/09-seo.md).
+         ============================================================ -->
+    <link rel="canonical" href="https://resufy.app/" />
+    <meta property="og:url" content="https://resufy.app/" />
+    <meta property="og:image" content="https://resufy.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="resufy — buat CV yang lolos ATS, cek plagiarisme, dan toolbox dokumen gratis. Bayar Rp2.000 hanya saat unduh PDF berkualitas tinggi."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="resufy — CV ATS, Cek Plagiarisme & Toolbox Gratis" />
+    <meta
+      name="twitter:description"
+      content="Buat CV yang lolos ATS, cek plagiarisme dokumen, dan pakai toolbox gratis. Bayar Rp2.000 hanya saat unduh PDF berkualitas tinggi."
+    />
+    <meta name="twitter:image" content="https://resufy.app/og-image.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      as="style"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- OPTIMASI FASE 08: preconnect untuk origin aset yang dipakai app
+         (Cloudinary: PDF/preview/upload; Midtrans: popup payment Snap). -->
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://app.sandbox.midtrans.com" />
+    <link rel="preconnect" href="https://app.midtrans.com" />
+    <title>resufy — CV ATS, Cek Plagiarisme & Toolbox Gratis</title>
+    <!-- FASE 09 SEO — structured data (schema.org).
+         JSON-LD ditulis statis di sini (bukan di-render JS) supaya tetap
+         terbaca crawler SPA. Dipakai @graph untuk Organization, WebSite,
+         dan SoftwareApplication (tanpa rating palsu). -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://resufy.app/#organization",
+            "name": "resufy",
+            "url": "https://resufy.app/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://resufy.app/favicon.svg",
+              "width": 512,
+              "height": 512
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://resufy.app/#website",
+            "url": "https://resufy.app/",
+            "name": "resufy",
+            "inLanguage": "id-ID",
+            "publisher": { "@id": "https://resufy.app/#organization" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://resufy.app/#software",
+            "name": "resufy",
+            "url": "https://resufy.app/",
+            "applicationCategory": "WebApplication",
+            "operatingSystem": "Web",
+            "inLanguage": "id-ID",
+            "description": "Buat CV yang lolos ATS, cek plagiarisme dokumen, dan pakai toolbox gratis (kompres, konversi, optimasi gambar, scan dokumen).",
+            "offers": {
+              "@type": "Offer",
+              "price": "2000",
+              "priceCurrency": "IDR",
+              "description": "Bayar sekali per unduhan PDF kualitas tinggi. Semua fitur lain gratis."
+            },
+            "publisher": { "@id": "https://resufy.app/#organization" }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

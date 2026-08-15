@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Environment (rahasia — JANGAN PERNAH commit)
+.env
+.env.*
+!.env.example
+
+# Build / logs
+dist/
+build/
+*.log
+logs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Temp (Toolbox file sementara)
+tmp/
+temp/

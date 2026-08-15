@@ -1,0 +1,61 @@
+{
+  "name": "resufy-backend",
+  "version": "0.1.0",
+  "description": "resufy — SaaS 3 modul (CV Builder ATS, Plagiarism Checker self-built, Toolbox gratis). Backend Node.js + Express + MongoDB.",
+  "private": true,
+  "type": "commonjs",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "echo \"placeholder — test suite penuh di fase 07 (testing)\" && exit 0",
+    "check": "node scripts/check-syntax.js"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "js,json",
+    "ignore": [
+      "node_modules",
+      "scripts",
+      "*.test.js"
+    ],
+    "quiet": false
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.6",
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
+    "compression": "^1.7.5",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dommatrix": "^0.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mammoth": "^1.9.0",
+    "midtrans-client": "^1.4.2",
+    "mongoose": "^8.12.1",
+    "multer": "^2.0.1",
+    "nodemailer": "^6.10.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.2.108",
+    "pdfkit": "^0.15.2",
+    "pino": "^9.6.0",
+    "pino-http": "^10.4.0",
+    "sharp": "^0.33.5",
+    "unpdf": "^0.12.2",
+    "word-extractor": "^1.0.4",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

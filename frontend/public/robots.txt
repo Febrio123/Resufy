@@ -1,0 +1,18 @@
+# resufy — robots.txt (fase 09 SEO)
+# Domain placeholder: https://resufy.app — ganti dengan domain final saat deploy
+# (lihat memory/09-seo.md, catatan untuk fase 10).
+#
+# Aturan main (RFC 9309):
+#  - Semua crawler diizinkan.
+#  - /api/* diblokir (endpoint backend, tidak boleh di-index).
+#  - /app (dashboard & modul ber-akun) diblokir — konten privat per pengguna.
+#    KECUALI /app/toolbox dan /app/toolbox/* yang memang PUBLIK (tanpa login);
+#    longest-match berlaku, jadi Allow ini menang atas Disallow /app.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /app
+Allow: /app/toolbox
+
+Sitemap: https://resufy.app/sitemap.xml

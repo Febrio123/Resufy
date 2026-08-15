@@ -1,0 +1,44 @@
+# ============================================================
+# resufy — .gitignore (dibuat fase 05 security)
+# JANGAN commit .env / secret apa pun ke repo.
+# ============================================================
+
+# Environment & secrets (kecuali template)
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Logs (jangan commit — bisa berisi PII/error stack)
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output (fase frontend nanti)
+dist/
+build/
+*.tsbuildinfo
+
+# Coverage / test artifacts
+coverage/
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# ============================================================
+# Data pribadi & folder internal (JANGAN di-push)
+# ============================================================
+draft-cv-febrio.json
+memory/
+project-idea/
+.obsidian/
+.opencode/
+.vercel/
