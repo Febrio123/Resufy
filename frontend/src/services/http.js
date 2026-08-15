@@ -20,8 +20,22 @@
 import axios from 'axios';
 import { isSessionReusedError } from '../utils/errors';
 
+/**
+ * baseURL: pakai VITE_API_URL HANYA bila benar-benar menunjuk host lain —
+ * mengabaikan nilai yang menunjuk localhost (mis. `http://localhost:4112`
+ * yang tak sengaja terset di env production Vercel → browser pengguna
+ * memanggil localhost sendiri → CORS error). Di production pakai relative
+ * '/api' → di-rewrite vercel.json ke backend. Di dev, VITE_API_URL yang
+ * benar (host non-localhost) tetap dipakai apa adanya.
+ */
+const apiBaseUrl =
+  import.meta.env.VITE_API_URL &&
+  !/^(http:\/\/)?(localhost|127\.0\.0\.1)/.test(import.meta.env.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL
+    : '/api';
+
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: apiBaseUrl,
   withCredentials: true, // cookie httpOnly (05-security.md §7)
   timeout: 30000,
 });
