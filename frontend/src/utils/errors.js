@@ -4,9 +4,36 @@
  * Termasuk error 429 (rate limit → pesan backoff) & blob error (toolbox).
  */
 
+/** Label field utk detail validasi zod backend — fallback ke nama field mentah. */
+const VALIDATION_FIELD_LABELS = {
+  email: 'Email',
+  password: 'Password',
+  confirmPassword: 'Konfirmasi password',
+  name: 'Nama',
+  token: 'Token',
+  title: 'Judul',
+  itemType: 'Jenis item',
+};
+
+function validationFieldLabel(field) {
+  const key = String(field ?? '');
+  if (VALIDATION_FIELD_LABELS[key]) return VALIDATION_FIELD_LABELS[key];
+  // Path bertingkat (mis. 'user.name') → label segmen terakhir.
+  return key.includes('.') ? key.split('.').pop() : key;
+}
+
 export function extractErrorMessage(error, fallback = 'Terjadi kesalahan. Silakan coba lagi.') {
   if (error?.userMessage) return error.userMessage;
   const data = error?.response?.data;
+  // 422 VALIDATION_ERROR dengan details zod (`{ field, message }`, backend
+  // middlewares/validate.js) → tampilkan detail per field ("Data tidak valid:
+  // Email — Expected string, received object"). Tanpa details → pesan generik.
+  const isValidation422 =
+    error?.response?.status === 422 && data?.error?.code === 'VALIDATION_ERROR';
+  if (isValidation422 && Array.isArray(data.error.details) && data.error.details.length > 0) {
+    const parts = data.error.details.map((d) => `${validationFieldLabel(d.field)} — ${d.message}`);
+    return `Data tidak valid: ${parts.join('; ')}`;
+  }
   if (data?.error?.message) return data.error.message;
   if (data?.message) return data.message;
   if (error?.response?.status === 429)

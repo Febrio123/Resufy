@@ -9,6 +9,6 @@ export const authApi = {
   me: () => http.get('/auth/me'),
   // NOTE: refresh TIDAK ada di sini — SEMUA panggilan refresh lewat
   // refreshSessionOnce() di services/http.js (singleton serial, satu jalur).
-  forgotPassword: (email) => http.post('/auth/forgot-password', { email }),
+  forgotPassword: (payload) => http.post('/auth/forgot-password', payload),
   resetPassword: ({ token, password }) => http.post('/auth/reset-password', { token, password }),
 };
