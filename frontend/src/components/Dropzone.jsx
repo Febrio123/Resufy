@@ -89,7 +89,6 @@ export function Dropzone({
         tabIndex={0}
         aria-label={label}
         aria-disabled={disabled}
-        onClick={() => !disabled && inputRef.current?.click()}
         onKeyDown={(e) => {
           if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
             e.preventDefault();
@@ -106,7 +105,7 @@ export function Dropzone({
           setDragOver(false);
           if (!disabled) handleFiles(e.dataTransfer.files);
         }}
-        className={`flex min-h-44 cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 text-center transition-all duration-200 ${
+        className={`relative flex min-h-44 cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 text-center transition-all duration-200 ${
           dragOver
             ? 'border-primary bg-primary-50 shadow-lg'
             : 'border-border bg-gradient-to-b from-surface to-primary-50/30 shadow-sm hover:border-primary/50 hover:shadow-md'
@@ -129,7 +128,7 @@ export function Dropzone({
         <input
           ref={inputRef}
           type="file"
-          className="sr-only"
+          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
           accept={accept}
           capture={capture}
           onChange={(e) => {
