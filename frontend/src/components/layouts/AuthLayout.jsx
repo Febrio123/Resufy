@@ -8,19 +8,21 @@ import {
   Sparkle,
 } from '@phosphor-icons/react';
 
+import { Logo } from '../ui/Logo';
+
 const TRUST_POINTS = [
-  { icon: FileText, text: 'CV satu kolom yang benar-benar lolos saringan ATS' },
-  { icon: CheckCircle, text: 'Cek plagiarisme dengan daftar sumber yang bisa diverifikasi' },
-  { icon: ShieldCheck, text: 'Bayar hanya Rp2.000 saat unduh PDF HQ — tanpa langganan' },
+  { icon: FileText, text: 'CV standar ATS yang ramah scanner rekruter' },
+  { icon: CheckCircle, text: '2 Template pilihan: dengan foto 3x4 formal atau tanpa foto' },
+  { icon: ShieldCheck, text: 'Skor ATS realtime dan download PDF gratis' },
 ];
 
 const DEFAULT_QUOTE =
-  'Buat CV standar rekruter, cek keaslian tulisan, lalu unduh PDF berkualitas tinggi hanya Rp2.000 — sekali bayar, tanpa langganan.';
+  'Buat CV standar rekruter, optimasi dengan skor ATS realtime, dan cetak PDF profesional tanpa ribet.';
 
 /** Quote panel kiri per halaman auth (fallback default untuk /login). */
 const QUOTES = {
   '/register':
-    'Gratis selama membuat, mengedit, dan mengecek. Bayar hanya saat mengunduh PDF final — Rp2.000, sekali, untuk selamanya.',
+    'Daftar gratis dan buat CV ATS profesional dalam hitungan menit.',
   '/forgot-password':
     'Kami kirim tautan reset ke emailmu — aman, cepat, tanpa ribet. Kembalikan akses akunmu dalam beberapa menit.',
   '/reset-password':
@@ -29,16 +31,14 @@ const QUOTES = {
 
 /** Badge kecil di atas form card per halaman auth. */
 const BADGES = {
-  '/register': { icon: Sparkle, text: 'Daftar gratis · tanpa kartu kredit' },
+  '/register': { icon: Sparkle, text: 'Daftar gratis · HireUp' },
   '/forgot-password': { icon: Key, text: 'Reset kata sandi via email' },
   '/reset-password': { icon: LockKey, text: 'Buat kata sandi baru' },
 };
 const DEFAULT_BADGE = { icon: ShieldCheck, text: 'Masuk dengan aman' };
 
 /**
- * AuthLayout — split-screen: kiri panel brand (gradient + grid pattern +
- * mini mockup skor), kanan form card premium. Quote & badge dinamis
- * berdasarkan pathname (nested-route via Outlet).
+ * AuthLayout — split-screen: kiri panel brand, kanan form card.
  */
 export function AuthLayout() {
   const { pathname } = useLocation();
@@ -58,16 +58,15 @@ export function AuthLayout() {
           aria-hidden
         />
 
-        <div className="relative flex items-center gap-2" aria-hidden>
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
-            <Sparkle size={20} weight="bold" />
-          </span>
-          <span className="text-xl font-extrabold tracking-tight">resufy</span>
+        <div className="relative inline-flex items-center">
+          <div className="rounded-xl bg-white px-3.5 py-1.5 shadow-md">
+            <Logo to="/" size="md" />
+          </div>
         </div>
 
         <div className="relative max-w-md">
           <h2 className="text-4xl font-extrabold leading-tight">
-            CV yang lolos ATS & laporan plagiarisme — dalam satu tempat.
+            Bangun CV Standar ATS Profesional bersama HireUp.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-white/75">{quote}</p>
 
@@ -119,7 +118,7 @@ export function AuthLayout() {
             ))}
           </ul>
           <p className="mt-6 text-xs text-white/50">
-            © {new Date().getFullYear()} resufy · Dibuat untuk pelamar kerja Indonesia
+            © {new Date().getFullYear()} HireUp · Dibuat untuk pelamar kerja Indonesia
           </p>
         </div>
       </aside>
@@ -128,16 +127,9 @@ export function AuthLayout() {
       <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-4 py-10">
         <div className="blob absolute left-1/2 top-1/3 h-80 w-80 -translate-x-1/2 bg-primary/10" aria-hidden />
 
-        <Link
-          to="/"
-          className="relative mb-6 flex items-center gap-2 lg:hidden"
-          aria-label="resufy — beranda"
-        >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-cta-gradient text-white shadow-glow-primary">
-            <Sparkle size={18} weight="bold" aria-hidden />
-          </span>
-          <span className="text-lg font-extrabold tracking-tight text-foreground">resufy</span>
-        </Link>
+        <div className="relative mb-6 lg:hidden">
+          <Logo to="/" size="md" />
+        </div>
 
         <div className="relative w-full max-w-md">
           <div className="rounded-2xl border border-border bg-surface p-6 shadow-xl ring-1 ring-black/5 md:p-8">
@@ -150,7 +142,7 @@ export function AuthLayout() {
             <Outlet />
           </div>
           <p className="mt-6 text-center text-xs text-muted-fg">
-            © {new Date().getFullYear()} resufy · Pay-per-print Rp2.000
+            © {new Date().getFullYear()} HireUp · Pay-per-print Rp2.000
           </p>
         </div>
       </main>

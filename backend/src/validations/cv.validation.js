@@ -74,11 +74,13 @@ const contentSchema = z.object({
 const createCvSchema = z.object({
   title: z.string().trim().min(1, 'Judul CV wajib diisi').max(120, 'Judul maksimal 120 karakter'),
   content: contentSchema.optional(),
+  template: z.enum(['without-photo', 'with-photo']).optional().default('without-photo'),
 });
 
 const updateCvSchema = z.object({
   title: z.string().trim().min(1).max(120).optional(),
   content: contentSchema.optional(),
+  template: z.enum(['without-photo', 'with-photo']).optional(),
 });
 
 const atsJobSchema = z.object({
@@ -92,4 +94,16 @@ const previewCvSchema = z.object({
   content: contentSchema,
 });
 
-module.exports = { createCvSchema, updateCvSchema, atsJobSchema, contentSchema, previewCvSchema };
+// Photo crop validation (normalized 0-1 ratio)
+const photoCropSchema = z.object({
+  x: z.number().min(0).max(1).default(0),
+  y: z.number().min(0).max(1).default(0),
+  width: z.number().min(0).max(1).default(1),
+  height: z.number().min(0).max(1).default(1),
+});
+
+const updatePhotoCropSchema = z.object({
+  photoCrop: photoCropSchema,
+});
+
+module.exports = { createCvSchema, updateCvSchema, atsJobSchema, contentSchema, previewCvSchema, updatePhotoCropSchema };

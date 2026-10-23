@@ -16,8 +16,8 @@ export default function ResetPasswordPage() {
   // SEO fase 09: halaman ini memuat token rahasia di query string —
   // noindex, nofollow (robots meta dihapus otomatis saat navigasi keluar).
   usePageMeta({
-    title: 'Atur Ulang Kata Sandi — resufy',
-    description: 'Buat kata sandi baru untuk akun resufy kamu.',
+    title: 'Atur Ulang Kata Sandi — HireUp',
+    description: 'Buat kata sandi baru untuk akun HireUp kamu.',
     robots: 'noindex, nofollow',
   });
   const [searchParams] = useSearchParams();

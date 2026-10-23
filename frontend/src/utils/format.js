@@ -1,16 +1,6 @@
 /**
- * Format harga & tanggal — konsistensi lintas fase (03-ui-ux-design.md §6.5).
- * - UI umum: "Rp2.000" (tanpa spasi).
- * - Invoice/tabel transaksi: "IDR 2.000" via Intl id-ID.
+ * Format tanggal — konsistensi lintas fase (03-ui-ux-design.md §6.5).
  */
-
-export function formatPrice(amount = 2000) {
-  return `Rp${new Intl.NumberFormat('id-ID').format(amount)}`;
-}
-
-export function formatIdr(amount = 2000) {
-  return `IDR ${new Intl.NumberFormat('id-ID').format(amount)}`;
-}
 
 export function formatDate(iso) {
   if (!iso) return '-';

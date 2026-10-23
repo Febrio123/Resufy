@@ -1,8 +1,8 @@
 /**
  * Plagiarism controller — upload → proses ASYNC (background, polling 5s) →
- * hasil & PDF preview/final (preview gratis ber-watermark, final setelah bayar).
- * Upload WAJIB login (keputusan lintas fase: history per-user untuk model
- * pay-per-print). File asli di-upload ke Cloudinary sebagai raw.
+ * hasil & PDF download gratis tanpa watermark untuk semua user.
+ * Upload WAJIB login (keputusan lintas fase: history per-user).
+ * File asli di-upload ke Cloudinary sebagai raw.
  */
 const { PlagiarismCheck } = require('../models/plagiarismCheck.model');
 const { AppError } = require('../utils/AppError');
@@ -119,60 +119,36 @@ const getCheck = async (req, res) => {
 };
 
 // ---------------------------------------------------------------------------
-// PDF preview (watermark) & final (harus paid)
+// PDF gratis tanpa watermark untuk semua user
 // ---------------------------------------------------------------------------
 
-const getPreviewPdf = async (req, res) => {
+const getPdf = async (req, res) => {
   const check = await PlagiarismCheck.findOne({ _id: req.params.id, userId: req.user._id, deletedAt: null });
   if (!check) throw new AppError(404, 'NOT_FOUND', 'Pemeriksaan tidak ditemukan');
   if (check.status !== 'completed') {
     throw new AppError(409, 'CHECK_NOT_READY', 'Pemeriksaan belum selesai — tunggu status completed');
   }
 
-  if (!(check.files && check.files.previewPdfUrl)) {
-    const buffer = await generatePlagiarismPdf(check, { watermark: true });
+  if (!(check.files && check.files.pdfUrl)) {
+    const buffer = await generatePlagiarismPdf(check);
     const uploaded = await uploadBuffer(buffer, {
       folder: `plagiarism/${check.userId}/${check._id}`,
-      publicId: 'preview.pdf',
+      publicId: 'pdf',
       resourceType: 'raw',
       format: 'pdf',
     });
     if (!check.files) check.files = {};
-    check.files.previewPdfUrl = uploaded.url;
-    check.files.previewPdfPublicId = uploaded.publicId;
+    check.files.pdfUrl = uploaded.url;
+    check.files.pdfPublicId = uploaded.publicId;
     await check.save();
   }
-  const publicId = check.files.previewPdfPublicId || publicIdFromUrl(check.files.previewPdfUrl);
-  const target = getSignedUrl({ publicId, resourceType: 'raw' }) || check.files.previewPdfUrl;
+  const publicId = check.files.pdfPublicId || publicIdFromUrl(check.files.pdfUrl);
+  const target = getSignedUrl({ publicId, resourceType: 'raw' }) || check.files.pdfUrl;
   res.redirect(302, target);
 };
 
-const getFinalPdf = async (req, res) => {
-  const check = await PlagiarismCheck.findOne({ _id: req.params.id, userId: req.user._id, deletedAt: null });
-  if (!check) throw new AppError(404, 'NOT_FOUND', 'Pemeriksaan tidak ditemukan');
-  if (check.status !== 'completed') {
-    throw new AppError(409, 'CHECK_NOT_READY', 'Pemeriksaan belum selesai');
-  }
-  if (check.paidStatus !== 'paid') {
-    throw new AppError(409, 'NOT_PAID', 'Laporan belum dibayar — lakukan pembayaran untuk mengunduh PDF final');
-  }
-
-  if (!(check.files && check.files.finalPdfUrl)) {
-    const buffer = await generatePlagiarismPdf(check, { watermark: false });
-    const uploaded = await uploadBuffer(buffer, {
-      folder: `plagiarism/${check.userId}/${check._id}`,
-      publicId: `final_${Date.now()}`,
-      resourceType: 'raw',
-      format: 'pdf',
-    });
-    if (!check.files) check.files = {};
-    check.files.finalPdfUrl = uploaded.url;
-    check.files.finalPdfPublicId = uploaded.publicId;
-    await check.save();
-  }
-  const publicId = check.files.finalPdfPublicId || publicIdFromUrl(check.files.finalPdfUrl);
-  const target = getSignedUrl({ publicId, resourceType: 'raw' }) || check.files.finalPdfUrl;
-  res.redirect(302, target);
-};
+// Backward compatibility - preview & final sekarang sama
+const getPreviewPdf = getPdf;
+const getFinalPdf = getPdf;
 
 module.exports = { uploadPlagiarism, listChecks, getCheck, getPreviewPdf, getFinalPdf, mimeToFileType };

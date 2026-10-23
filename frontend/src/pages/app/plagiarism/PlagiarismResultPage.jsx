@@ -4,7 +4,6 @@ import { CaretLeft, CheckCircle, Copy, Download, Eye, UsersThree } from '@phosph
 import { plagiarismApi } from '../../../services/plagiarism';
 import { ensureFreshSession } from '../../../services/http';
 import { useToast } from '../../../contexts/ToastContext';
-import { usePaymentDialog } from '../../../contexts/PaymentDialogContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { usePolling } from '../../../hooks/usePolling';
 import { ProgressSteps } from '../../../components/ProgressSteps';
@@ -26,7 +25,6 @@ export default function PlagiarismResultPage() {
   const navigate = useNavigate();
   const toast = useToast();
   const { user } = useAuth();
-  const { openPayment } = usePaymentDialog();
 
   const [check, setCheck] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -94,7 +92,6 @@ export default function PlagiarismResultPage() {
 
   const running = !TERMINAL.includes(check.status);
   const tone = similarityTone(check.overallScore);
-  const isPaid = check.paidStatus === 'paid';
 
   // Segmen: urut skor turun + filter terindikasi (score >= 0.15 atau ada sumber)
   const segments = check.segments || [];
@@ -213,31 +210,13 @@ export default function PlagiarismResultPage() {
             >
               Preview PDF
             </Button>
-            {isPaid ? (
-              <Button
-                variant="accent"
-                icon={Download}
-                onClick={() => openPdf(plagiarismApi.finalPdfUrl(id))}
-              >
-                Unduh PDF Final
-              </Button>
-            ) : (
-              <Button
-                variant="accent"
-                icon={Download}
-                onClick={() =>
-                  openPayment({
-                    itemType: 'plagiarism',
-                    itemId: id,
-                    title: 'Laporan Plagiarisme',
-                    subtitle: `${check.originalFilename || 'Dokumen'} — PDF berkualitas tinggi.`,
-                    previewUrl: plagiarismApi.previewPdfUrl(id),
-                  })
-                }
-              >
-                Unduh HQ
-              </Button>
-            )}
+            <Button
+              variant="accent"
+              icon={Download}
+              onClick={() => openPdf(plagiarismApi.previewPdfUrl(id))}
+            >
+              Unduh PDF
+            </Button>
           </div>
         )}
       </div>
@@ -561,7 +540,7 @@ export default function PlagiarismResultPage() {
             </Card>
           )}
 
-          <PreviewBanner text="Laporan ini versi PREVIEW. Unduh HQ untuk salinan penuh tanpa watermark." />
+          <PreviewBanner text="Laporan gratis tanpa watermark — unduh PDF kapan saja." />
         </>
       )}
     </div>

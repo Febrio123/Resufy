@@ -70,7 +70,7 @@ export async function ensureFreshSession() {
 }
 
 /** Prefix route yang dilindungi csrfProtect di backend (05-security.md §2.2). */
-const CSRF_GUARDED_PREFIXES = ['/cvs', '/plagiarism', '/payments'];
+const CSRF_GUARDED_PREFIXES = ['/cvs'];
 const MUTATION_METHODS = new Set(['post', 'put', 'patch', 'delete']);
 
 http.interceptors.request.use((config) => {

@@ -32,9 +32,9 @@ if (emailEnabled) {
  * @param {string} resetLink URL lengkap ke halaman reset password frontend
  */
 async function sendPasswordResetEmail(to, resetLink) {
-  const from = env.EMAIL_FROM || `resufy <no-reply@${env.SMTP_HOST || 'resufy.local'}>`;
-  const subject = 'resufy — Reset Password';
-  const text = `Halo,\n\nKami menerima permintaan reset password untuk akunmu.\nKlik link berikut untuk mengatur password baru (berlaku 15 menit):\n\n${resetLink}\n\nJika kamu tidak meminta reset, abaikan email ini.\n\n— resufy`;
+  const from = env.EMAIL_FROM || `HireUp <no-reply@${env.SMTP_HOST || 'hireup.local'}>`;
+  const subject = 'HireUp — Reset Password';
+  const text = `Halo,\n\nKami menerima permintaan reset password untuk akunmu.\nKlik link berikut untuk mengatur password baru (berlaku 15 menit):\n\n${resetLink}\n\nJika kamu tidak meminta reset, abaikan email ini.\n\n— HireUp`;
 
   if (!transporter) {
     // Production: JANGAN pernah mencetak reset link ke log (log bisa bocor →

@@ -7,8 +7,8 @@ import usePageMeta from '../hooks/usePageMeta';
 export default function NotFound() {
   // SEO fase 09
   usePageMeta({
-    title: 'Halaman tidak ditemukan — resufy',
-    description: 'Halaman yang kamu cari tidak ada di resufy.',
+    title: 'Halaman tidak ditemukan — HireUp',
+    description: 'Halaman yang kamu cari tidak ada di HireUp.',
   });
   return (
     <PublicLayout>

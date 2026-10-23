@@ -1,19 +1,6 @@
 /** Helper umum: id generator, token hash, sanitasi teks, tokenisasi keyword. */
 const crypto = require('crypto');
 
-/** Order ID unik utk Midtrans: ORDER-<epoch>-<random4> (unique index di payments). */
-function generateMidtransOrderId() {
-  return `ORDER-${Date.now()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
-}
-
-/** Invoice sederhana: RSF-YYYYMM-XXXX (fallback kontrak UI: pakai midtransOrderId). */
-function generateInvoiceNumber() {
-  const now = new Date();
-  const yyyymm = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}`;
-  const rand = crypto.randomBytes(2).toString('hex').toUpperCase();
-  return `RSF-${yyyymm}-${rand}`;
-}
-
 /** Hash token reset password (tokenHash — jangan simpan token mentah). */
 function hashToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
@@ -82,8 +69,6 @@ function sanitizeFilename(name, fallback = 'file') {
 }
 
 module.exports = {
-  generateMidtransOrderId,
-  generateInvoiceNumber,
   hashToken,
   generateRandomToken,
   normalizeWhitespace,

@@ -19,6 +19,8 @@ import { Select } from "../ui/Select";
 import { Checkbox } from "../ui/Checkbox";
 import { Button } from "../ui/Button";
 import { ChipsInput } from "../ChipsInput";
+import { TemplateSelector } from "../ui/TemplateSelector";
+import { PhotoSection } from "./PhotoSection";
 
 const EMPTY_CONTENT = {
 	personalInfo: {
@@ -119,8 +121,29 @@ function ItemCard({ title, onRemove, children }) {
  * CvForm — editor CV lengkap (wireframe 4.4): accordion satu-section-terbuka,
  * array editor per pengalaman/pendidikan/sertifikasi/proyek/bahasa.
  * `content` adalah objek konten CV murni (tanpa id/title/status).
+ * Props tambahan:
+ *   - template (string): 'without-photo' | 'with-photo'
+ *   - onTemplateChange (fn): callback perubahan template
+ *   - photoUrl, photoCrop: data foto
+ *   - onPhotoUpload, onPhotoCropUpdate, onPhotoDelete: callbacks foto
+ *   - photoUploading, photoCropSaving, photoDeleting: loading states
  */
-export function CvForm({ content, onChange, disabled = false }) {
+export function CvForm({ 
+	content, 
+	onChange, 
+	disabled = false,
+	// Template & foto props (opsional)
+	template,
+	onTemplateChange,
+	photoUrl,
+	photoCrop,
+	onPhotoUpload,
+	onPhotoCropUpdate,
+	onPhotoDelete,
+	photoUploading = false,
+	photoCropSaving = false,
+	photoDeleting = false,
+}) {
 	const [openSection, setOpenSection] = useState("personal");
 	const c = {
 		...EMPTY_CONTENT,
@@ -146,6 +169,34 @@ export function CvForm({ content, onChange, disabled = false }) {
 
 	return (
 		<div className="space-y-3">
+			{/* Template selector — tampil jika handler disediakan */}
+			{onTemplateChange && (
+				<div className="rounded-xl border border-border bg-surface p-4 shadow-sm md:p-6">
+					<TemplateSelector
+						value={template}
+						onChange={onTemplateChange}
+						disabled={disabled}
+					/>
+				</div>
+			)}
+
+			{/* Photo section — tampil hanya jika template = 'with-photo' */}
+			{template === 'with-photo' && onPhotoUpload && (
+				<div className="rounded-xl border border-border bg-surface p-4 shadow-sm md:p-6">
+					<PhotoSection
+						photoUrl={photoUrl}
+						photoCrop={photoCrop}
+						onUpload={onPhotoUpload}
+						onCropUpdate={onPhotoCropUpdate}
+						onDelete={onPhotoDelete}
+						uploading={photoUploading}
+						saving={photoCropSaving}
+						deleting={photoDeleting}
+						disabled={disabled}
+					/>
+				</div>
+			)}
+
 			<SectionCard
 				number={1}
 				title="Data Pribadi"

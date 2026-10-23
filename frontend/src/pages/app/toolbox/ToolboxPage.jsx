@@ -39,7 +39,7 @@ export const TOOLS = [
 export default function ToolboxPage() {
   // SEO fase 09
   usePageMeta({
-    title: 'Toolbox Dokumen Gratis — resufy',
+    title: 'Toolbox Dokumen Gratis — HireUp',
     description:
       'Kompres PDF, parafrase teks dengan AI, dan cek teks AI — gratis, tanpa perlu akun.',
   });

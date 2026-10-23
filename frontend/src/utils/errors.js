@@ -65,18 +65,6 @@ export function isRateLimited(error) {
   return error?.response?.status === 429;
 }
 
-/** 409 ALREADY_PAID — kontrak payment (03-ui-ux-design.md §6.1). */
-export function isAlreadyPaid(error) {
-  return (
-    error?.response?.status === 409 &&
-    error.response.data?.error?.code === 'ALREADY_PAID'
-  );
-}
-
-export function isLockedPaid(error) {
-  return error?.response?.status === 409 && error.response.data?.error?.code === 'LOCKED_PAID';
-}
-
 /**
  * 401 SESSION_REUSED — refresh cookie dipakai ulang di luar grace period /
  * token hasil logout (05-security §7, auth.controller REUSE). Artinya SESI

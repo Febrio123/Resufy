@@ -18,9 +18,9 @@ export default function LoginPage() {
   const reduced = useReducedMotion();
   // SEO fase 09
   usePageMeta({
-    title: 'Masuk — resufy',
+    title: 'Masuk — HireUp',
     description:
-      'Masuk ke akun resufy untuk melanjutkan CV, cek plagiarisme, dan toolbox dokumen gratis.',
+      'Masuk ke akun HireUp untuk melanjutkan CV, dan download PDF ATS gratis.',
   });
 
   const [form, setForm] = useState({ email: '', password: '' });

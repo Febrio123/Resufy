@@ -83,6 +83,25 @@ const cvDocumentSchema = new mongoose.Schema(
       required: [true, 'templateId wajib'],
       default: 'ats-single-column', // config backend (hardcode), bukan koleksi
     },
+    template: {
+      type: String,
+      enum: ['without-photo', 'with-photo'],
+      default: 'without-photo',
+    },
+    photoUrl: {
+      type: String,
+      default: null,
+    },
+    photoCrop: {
+      type: {
+        x: { type: Number, default: 0, min: 0, max: 1 },
+        y: { type: Number, default: 0, min: 0, max: 1 },
+        width: { type: Number, default: 1, min: 0, max: 1 },
+        height: { type: Number, default: 1, min: 0, max: 1 },
+        _id: false,
+      },
+      default: null,
+    },
     content: {
       type: cvContentSchema,
       default: () => ({}),
@@ -109,18 +128,10 @@ const cvDocumentSchema = new mongoose.Schema(
       },
       default: null,
     },
-    paidStatus: {
-      type: String,
-      enum: ['unpaid', 'paid'],
-      default: 'unpaid',
-    },
-    paidAt: { type: Date, default: null },
     files: {
       type: {
-        previewPdfUrl: { type: String, default: null },
-        previewPdfPublicId: { type: String, default: null }, // utk signed URL segar
-        finalPdfUrl: { type: String, default: null },
-        finalPdfPublicId: { type: String, default: null }, // utk signed URL segar
+        pdfUrl: { type: String, default: null },
+        pdfPublicId: { type: String, default: null }, // utk signed URL segar
         docxUrl: { type: String, default: null }, // opsional (prioritas kedua)
         _id: false,
       },
@@ -141,12 +152,7 @@ const cvDocumentSchema = new mongoose.Schema(
 
 // Index sesuai desain: dashboard riwayat, filter paid, exclude soft-deleted
 cvDocumentSchema.index({ userId: 1, createdAt: -1 });
-cvDocumentSchema.index({ userId: 1, paidStatus: 1 });
 cvDocumentSchema.index({ userId: 1, deletedAt: 1 });
-
-cvDocumentSchema.methods.isPaid = function isPaid() {
-  return this.paidStatus === 'paid';
-};
 
 cvDocumentSchema.methods.toSafeJSON = function toSafeJSON() {
   return this.toJSON();

@@ -40,7 +40,7 @@ async function withLog(req, res, toolType, handler) {
     if (result.buffer) {
       res.setHeader('Content-Type', result.mime);
       // filename disanitasi (anti header injection CRLF/quote)
-      res.setHeader('Content-Disposition', `attachment; filename="${ sanitizeFilename(result.filename, 'resufy_output') }"`);
+      res.setHeader('Content-Disposition', `attachment; filename="${ sanitizeFilename(result.filename, 'hireup_output') }"`);
       return res.send(result.buffer);
     }
     return res.json({

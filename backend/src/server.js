@@ -20,11 +20,11 @@ async function start() {
   });
 
   const server = app.listen(env.PORT, () => {
-    logger.info(`resufy-api listening on http://localhost:${env.PORT} (${env.NODE_ENV})`);
+    logger.info(`resufy-api listening on http://localhost:${ env.PORT } (${ env.NODE_ENV })`);
   });
 
   const shutdown = (signal) => {
-    logger.info(`[server] ${signal} diterima — shutdown graceful...`);
+    logger.info(`[server] ${ signal } diterima — shutdown graceful...`);
     server.close(async () => {
       await disconnectMongo();
       process.exit(0);

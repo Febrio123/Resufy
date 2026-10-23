@@ -106,15 +106,15 @@ export default function ToolDetailPage() {
   // config, supaya urutan hook konsisten).
   usePageMeta({
     title: isAiCheck
-      ? 'AI Content Detector — Gratis | Toolbox resufy'
+      ? 'AI Content Detector — Gratis | Toolbox HireUp'
       : config
-        ? `${config.title} — Gratis | Toolbox resufy`
-        : 'Alat tidak ditemukan — resufy',
+        ? `${config.title} — Gratis | Toolbox HireUp`
+        : 'Alat tidak ditemukan — HireUp',
     description: isAiCheck
       ? 'Deteksi apakah teks ditulis AI (ChatGPT, Gemini, dll) berbasis pola statistik — gratis.'
       : config
         ? `${config.desc} Gratis, tanpa perlu akun.`
-        : 'Toolbox yang kamu cari tidak ada. Lihat daftar alat resufy yang tersedia.',
+        : 'Toolbox yang kamu cari tidak ada. Lihat daftar alat HireUp yang tersedia.',
   });
 
   const [file, setFile] = useState(null);

@@ -15,8 +15,8 @@ export default function ForgotPasswordPage() {
   const reduced = useReducedMotion();
   // SEO fase 09
   usePageMeta({
-    title: 'Lupa Kata Sandi — resufy',
-    description: 'Atur ulang kata sandi akun resufy kamu melalui email.',
+    title: 'Lupa Kata Sandi — HireUp',
+    description: 'Atur ulang kata sandi akun HireUp kamu melalui email.',
   });
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({});

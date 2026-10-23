@@ -29,7 +29,6 @@ const strictLimits = {
   // ensureFreshSession → 429 → login paksa tiap 15 menit (akar anomali user).
   refresh: createRateLimiter({ windowMs: 15 * 60 * 1000, max: 60, message: 'Terlalu banyak menyegarkan sesi. Coba lagi 15 menit lagi.' }),
   forgotPassword: createRateLimiter({ windowMs: 60 * 60 * 1000, max: 5, message: 'Terlalu banyak permintaan reset password. Coba lagi dalam 1 jam.' }),
-  paymentCreate: createRateLimiter({ windowMs: 60 * 1000, max: 5, message: 'Terlalu banyak membuat pembayaran. Coba lagi 1 menit lagi.' }),
   upload: createRateLimiter({ windowMs: 60 * 1000, max: 5, message: 'Terlalu banyak upload. Coba lagi 1 menit lagi.' }),
   toolbox: createRateLimiter({ windowMs: 60 * 1000, max: 10, message: 'Terlalu banyak proses Toolbox. Coba lagi 1 menit lagi.' }),
 };

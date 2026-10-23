@@ -17,9 +17,9 @@ export default function RegisterPage() {
   const reduced = useReducedMotion();
   // SEO fase 09
   usePageMeta({
-    title: 'Buat Akun — resufy',
+    title: 'Buat Akun — HireUp',
     description:
-      'Daftar gratis di resufy — buat CV yang lolos ATS, cek plagiarisme, dan pakai toolbox dokumen tanpa biaya.',
+      'Daftar gratis di HireUp — buat CV yang lolos ATS, dan download PDF ATS gratis.',
   });
 
   const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
@@ -35,7 +35,7 @@ export default function RegisterPage() {
     setSubmitting(true);
     try {
       await register({ name: form.name, email: form.email, password: form.password });
-      toast.success('Akun berhasil dibuat. Selamat datang di resufy!');
+      toast.success('Akun berhasil dibuat. Selamat datang di HireUp!');
       navigate('/app', { replace: true });
     } catch (err) {
       toast.error(extractErrorMessage(err));

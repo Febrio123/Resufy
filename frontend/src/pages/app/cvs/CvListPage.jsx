@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Clock,
   Download,
   Eye,
   FileText,
-  Info,
-  LockKey,
+  PencilSimple,
   Plus,
-  SealCheck,
   Trash,
+  UserSquare,
 } from '@phosphor-icons/react';
 import { cvsApi } from '../../../services/cvs';
 import { ensureFreshSession } from '../../../services/http';
@@ -25,27 +23,17 @@ import usePageMeta from '../../../hooks/usePageMeta';
 import { atsTone, formatDate } from '../../../utils/format';
 import { extractErrorMessage } from '../../../utils/errors';
 
-/**
- * CV Saya — riwayat CV dengan status paid/unpaid.
- * - paid   → "Unduh Bersih (Tanpa Watermark)" (final-pdf) + "Preview".
- * - unpaid → "Preview (Ber-watermark)" (preview-pdf, gratis) + himbauan bayar.
- * - Semua kartu: tombol Hapus (Trash) → modal konfirmasi → cvsApi.deleteCv (soft delete).
- * Backend pdfService: preview = ber-watermark, final = bersih — otomatis.
- */
 export default function CvListPage() {
   const navigate = useNavigate();
   const toast = useToast();
   const { user } = useAuth();
   const [cvs, setCvs] = useState(null);
-
-  // Konfirmasi hapus: confirmDelete = CV yang dipilih, deletingId = CV yang sedang dihapus.
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
   usePageMeta({
-    title: 'CV Saya — resufy',
-    description:
-      'Riwayat CV kamu: preview ber-watermark gratis, unduh versi bersih setelah bayar Rp2.000.',
+    title: 'CV Saya — HireUp',
+    description: 'Riwayat dan pengelolaan CV ATS profesional kamu.',
   });
 
   useEffect(() => {
@@ -59,10 +47,6 @@ export default function CvListPage() {
     };
   }, [toast]);
 
-  // Buka PDF via endpoint backend (guard paid + signed URL). Hanya jalan saat
-  // sesi masih valid — sebelum membuka tab, segarkan sesi (rotate access +
-  // refresh cookie) supaya cookie 15 menit tidak memunculkan JSON 401 di tab
-  // baru. Kalau refresh gagal, arahkan ke login dulu (pola CvDetailPage).
   const openPdf = async (url) => {
     if (!user) {
       toast.error('Sesi berakhir — silakan masuk kembali');
@@ -71,15 +55,13 @@ export default function CvListPage() {
     }
     try {
       await ensureFreshSession();
+      window.open(url, '_blank', 'noopener');
     } catch {
       toast.error('Sesi berakhir — silakan masuk kembali');
       navigate('/login', { state: { next: window.location.pathname } });
-      return;
     }
-    window.open(url, '_blank', 'noopener');
   };
 
-  // Hapus: konfirmasi → soft delete → update state lokal (tanpa refetch penuh).
   const handleDelete = async () => {
     if (!confirmDelete) return;
     setDeletingId(confirmDelete._id);
@@ -96,20 +78,28 @@ export default function CvListPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/80 pb-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-foreground">CV Saya</h1>
-          <p className="text-sm text-muted-fg">
-            Preview gratis (ber-watermark) — bayar Rp2.000 sekali untuk unduh versi bersih.
+          <h1 className="text-2xl font-black text-foreground">CV Saya</h1>
+          <p className="text-sm text-muted-fg mt-0.5">
+            Daftar seluruh CV standar ATS yang tersimpan di akunmu. Siap diedit dan diunduh langsung.
           </p>
         </div>
-        <Link to="/app/cvs/new">
-          <Button variant="accent" icon={Plus}>
-            Buat CV Baru
-          </Button>
-        </Link>
+
+        <div className="flex flex-wrap gap-2">
+          <Link to="/app/cvs/new?template=with-photo">
+            <Button variant="accent" size="sm" icon={UserSquare}>
+              Buat Dengan Foto
+            </Button>
+          </Link>
+          <Link to="/app/cvs/new?template=without-photo">
+            <Button variant="primary" size="sm" icon={FileText}>
+              Buat Tanpa Foto
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {!cvs ? (
@@ -117,99 +107,99 @@ export default function CvListPage() {
       ) : cvs.length === 0 ? (
         <EmptyState
           icon={FileText}
-          title="Belum ada CV"
-          description="Buat CV pertamamu — gratis. Cek skor ATS dulu, baru bayar saat mau unduh PDF tanpa watermark."
+          title="Belum ada CV yang dibuat"
+          description="Pilih salah satu template di bawah untuk mulai membuat CV ATS profesional."
           action={
-            <Link to="/app/cvs/new">
-              <Button variant="accent" icon={Plus}>
-                Buat CV Baru
-              </Button>
-            </Link>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link to="/app/cvs/new?template=with-photo">
+                <Button variant="accent" icon={UserSquare}>
+                  Template Dengan Foto (Kiri Atas)
+                </Button>
+              </Link>
+              <Link to="/app/cvs/new?template=without-photo">
+                <Button variant="primary" icon={FileText}>
+                  Template Tanpa Foto
+                </Button>
+              </Link>
+            </div>
           }
         />
       ) : (
-        <div className="space-y-3">
+        <div className="grid gap-3">
           {cvs.map((cv) => {
-            const isPaid = cv.paidStatus === 'paid';
+            const isWithPhoto = cv.template === 'with-photo';
             return (
-              <Card key={cv._id} padded={false} hoverable className="p-0">
-                <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-cta-gradient text-white shadow-glow-primary">
-                      <FileText size={20} weight="bold" aria-hidden />
+              <Card key={cv._id} padded={false} hoverable className="p-4 sm:p-5 border border-border/80 shadow-xs">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl ${
+                        isWithPhoto
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-primary-100 text-primary-700'
+                      }`}
+                    >
+                      {isWithPhoto ? (
+                        <UserSquare size={24} weight="bold" />
+                      ) : (
+                        <FileText size={24} weight="bold" />
+                      )}
                     </span>
-                    <div className="min-w-0">
-                      <Link
-                        to={`/app/cvs/${cv._id}`}
-                        className="block truncate text-sm font-bold text-foreground hover:text-primary"
-                      >
-                        {cv.title}
-                      </Link>
-                      <p className="text-xs text-muted-fg">Diperbarui {formatDate(cv.updatedAt)}</p>
+                    <div className="min-w-0 space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Link
+                          to={`/app/cvs/${cv._id}`}
+                          className="truncate text-base font-extrabold text-foreground hover:text-primary transition-colors max-w-sm"
+                        >
+                          {cv.title || 'Curriculum Vitae'}
+                        </Link>
+                        <span
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            isWithPhoto
+                              ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                              : 'bg-blue-50 text-blue-800 border border-blue-200'
+                          }`}
+                        >
+                          {isWithPhoto ? 'Foto Kiri Atas 3×4' : 'Standar Tanpa Foto'}
+                        </span>
+                        {cv.atsScore != null && (
+                          <Badge tone={atsTone(cv.atsScore).tone}>
+                            ATS {cv.atsScore}/100
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-fg">
+                        Nama: <span className="font-semibold text-foreground">{cv.content?.personalInfo?.fullName || 'Belum diisi'}</span> · Diperbarui {formatDate(cv.updatedAt)}
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 pl-[52px] sm:pl-0">
-                    {cv.atsScore != null && (
-                      <Badge tone={atsTone(cv.atsScore).tone}>ATS {cv.atsScore}/100</Badge>
-                    )}
-
-                    {/* Badge status — ikon + teks, bukan warna saja (a11y) */}
-                    <Badge tone={isPaid ? 'paid' : 'pending'} icon={isPaid ? SealCheck : Clock}>
-                      {isPaid ? 'Paid' : 'Belum Dibayar'}
-                    </Badge>
-
-                    {isPaid ? (
-                      <>
-                        <Button
-                          variant="accent"
-                          size="sm"
-                          icon={Download}
-                          onClick={() => openPdf(cvsApi.finalPdfUrl(cv._id))}
-                        >
-                          Unduh Bersih
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          icon={Eye}
-                          onClick={() => openPdf(cvsApi.previewPdfUrl(cv._id))}
-                        >
-                          Preview
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          icon={Eye}
-                          onClick={() => openPdf(cvsApi.previewPdfUrl(cv._id))}
-                        >
-                          Preview (Ber-watermark)
-                        </Button>
-                        <span
-                          className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-fg"
-                          title="Bayar untuk unduh tanpa watermark"
-                        >
-                          <LockKey size={12} aria-hidden />
-                          Bayar untuk unduh tanpa watermark
-                        </span>
-                      </>
-                    )}
-
-                    <span className="hidden h-6 w-px bg-border sm:block" aria-hidden />
+                  <div className="flex flex-wrap items-center gap-2 pl-[52px] sm:pl-0 pt-2 sm:pt-0 border-t border-border/40 sm:border-t-0">
                     <Button
-                      variant="danger"
+                      variant="accent"
                       size="sm"
-                      icon={Trash}
-                      aria-label={`Hapus CV ${cv.title}`}
-                      title="Hapus CV"
-                      disabled={Boolean(deletingId)}
-                      loading={deletingId === cv._id}
-                      onClick={() => setConfirmDelete(cv)}
+                      icon={Download}
+                      onClick={() => openPdf(cvsApi.downloadPdfUrl(cv._id))}
                     >
-                      Hapus
+                      Unduh PDF
+                    </Button>
+                    <Link to={`/app/cvs/${cv._id}/edit`}>
+                      <Button variant="secondary" size="sm" icon={PencilSimple}>
+                        Edit
+                      </Button>
+                    </Link>
+                    <Link to={`/app/cvs/${cv._id}`}>
+                      <Button variant="ghost" size="sm" icon={Eye}>
+                        Detail
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setConfirmDelete(cv)}
+                      aria-label={`Hapus ${cv.title}`}
+                    >
+                      <Trash size={16} className="text-destructive" />
                     </Button>
                   </div>
                 </div>
@@ -219,48 +209,31 @@ export default function CvListPage() {
         </div>
       )}
 
-      {/* Konfirmasi hapus — destructive; catatan khusus untuk CV paid */}
+      {/* Modal Konfirmasi Hapus */}
       <Modal
         open={Boolean(confirmDelete)}
-        onClose={() => {
-          if (!deletingId) setConfirmDelete(null);
-        }}
+        onClose={() => setConfirmDelete(null)}
         size="sm"
-        labelledBy="cv-list-delete-title"
         title="Hapus CV?"
       >
-        {confirmDelete && (
-          <div className="space-y-4">
-            <p className="text-sm text-muted-fg">
-              <span className="font-bold text-foreground">{confirmDelete.title}</span> akan dihapus dari
-              daftar. Tindakan ini tidak bisa dibatalkan.
-            </p>
-            {confirmDelete.paidStatus === 'paid' && (
-              <p className="flex items-start gap-1.5 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
-                <Info size={14} className="mt-0.5 shrink-0" aria-hidden />
-                CV yang sudah dibayar tetap bisa dihapus — pastikan kamu sudah mengunduh PDF-nya. Akses
-                unduh ulang tidak tersedia setelah CV dihapus.
-              </p>
-            )}
-            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <Button
-                variant="secondary"
-                onClick={() => setConfirmDelete(null)}
-                disabled={Boolean(deletingId)}
-              >
-                Batal
-              </Button>
-              <Button
-                variant="danger"
-                icon={Trash}
-                onClick={handleDelete}
-                loading={Boolean(deletingId)}
-              >
-                Hapus CV
-              </Button>
-            </div>
+        <div className="space-y-4">
+          <p className="text-sm text-muted-fg leading-relaxed">
+            Apakah kamu yakin ingin menghapus CV{' '}
+            <span className="font-bold text-foreground">{confirmDelete?.title}</span>? Tindakan ini tidak dapat dibatalkan.
+          </p>
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button variant="secondary" onClick={() => setConfirmDelete(null)}>
+              Batal
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleDelete}
+              loading={deletingId === confirmDelete?._id}
+            >
+              Hapus Permanen
+            </Button>
           </div>
-        )}
+        </div>
       </Modal>
     </div>
   );

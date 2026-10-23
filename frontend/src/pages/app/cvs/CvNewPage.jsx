@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Article,
   CaretLeft,
@@ -20,10 +20,13 @@ import { hasCvContent, sanitizeContent } from '../../../utils/cvJson';
 
 export default function CvNewPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const toast = useToast();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState({});
+  const initialTemplate = searchParams.get('template') === 'with-photo' ? 'with-photo' : 'without-photo';
+  const [template, setTemplate] = useState(initialTemplate);
   const [saving, setSaving] = useState(false);
   const [previewing, setPreviewing] = useState(false);
 
@@ -38,7 +41,7 @@ export default function CvNewPage() {
     }
     setSaving(true);
     try {
-      const { data } = await cvsApi.create({ title: title.trim(), content });
+      const { data } = await cvsApi.create({ title: title.trim(), content, template });
       toast.success('CV tersimpan. Lanjut lengkapi & cek ATS.');
       navigate(`/app/cvs/${data.cv._id}/edit`, { replace: true });
     } catch (err) {
@@ -91,7 +94,7 @@ export default function CvNewPage() {
     }
     setPreviewing(true);
     try {
-      const response = await cvsApi.previewPdf(content);
+      const response = await cvsApi.previewPdf({ content, template });
       const url = URL.createObjectURL(response.data);
       window.open(url, '_blank', 'noopener');
       // Tab baru memuat secara asinkron — lepaskan blob setelah cukup waktu.
@@ -172,7 +175,12 @@ export default function CvNewPage() {
             />
           </div>
 
-          <CvForm content={content} onChange={setContent} />
+          <CvForm 
+            content={content} 
+            onChange={setContent}
+            template={template}
+            onTemplateChange={setTemplate}
+          />
         </>
       ) : (
         <div className="space-y-3 rounded-lg border border-border bg-surface p-4 shadow-sm">

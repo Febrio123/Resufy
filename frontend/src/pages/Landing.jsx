@@ -2,32 +2,24 @@ import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
-  Bank,
-  Brain,
   CheckCircle,
-  Copy,
+  Download,
   FilePdf,
   FileText,
   FloppyDisk,
-  LockKey,
   Quotes,
   ShieldCheck,
   Sparkle,
   Star,
-  TextAa,
-  Wrench,
+  UserSquare,
+  CloudCheck,
 } from '@phosphor-icons/react';
 import { PublicLayout } from '../components/layouts/PublicLayout';
 import { Button } from '../components/ui/Button';
-import { PriceTag } from '../components/ui/PriceTag';
 import { Badge } from '../components/ui/Badge';
 import { useCountUp } from '../hooks/useCountUp';
 import usePageMeta from '../hooks/usePageMeta';
-import { COPY } from '../utils/constants';
 
-/* ---------------------------------------------------------------------------
-   StatNumber — angka count-up untuk stats bar (hormati reduced-motion)
---------------------------------------------------------------------------- */
 function StatNumber({ value, prefix = '', suffix = '', label }) {
   const n = useCountUp(value, { duration: 1.4 });
   const display = `${prefix}${Number(n.toFixed(0)).toLocaleString('id-ID')}${suffix}`;
@@ -39,9 +31,6 @@ function StatNumber({ value, prefix = '', suffix = '', label }) {
   );
 }
 
-/* ---------------------------------------------------------------------------
-   HeroMockup — visual produk 100% CSS: mini CV + floating skor ATS/plagiarism
---------------------------------------------------------------------------- */
 function HeroMockup() {
   const reduced = useReducedMotion();
   const float = reduced
@@ -53,65 +42,62 @@ function HeroMockup() {
 
   return (
     <div className="relative mx-auto mt-12 w-full max-w-lg md:mt-16" aria-hidden>
-      {/* Glow di belakang mockup */}
       <div className="blob -top-10 left-1/2 h-72 w-72 -translate-x-1/2 bg-primary/25" />
       <div className="blob bottom-0 right-0 h-56 w-56 bg-indigo-500/20" />
 
-      {/* Card utama — dokumen CV */}
+      {/* Card utama — mockup CV dengan foto kiri atas */}
       <div className="relative rounded-2xl bg-white p-5 shadow-xl ring-1 ring-black/5 md:p-6">
-        {/* Bar mini window */}
-        <div className="mb-4 flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-warning/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-success/70" />
-          <span className="ml-3 hidden rounded-md bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-fg sm:block">
-            resufy · preview CV
-          </span>
-        </div>
-
-        {/* Nama + title */}
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-lg font-extrabold text-foreground">Budi Santoso</p>
-            <p className="text-xs font-semibold text-primary">Frontend Developer</p>
+        <div className="mb-4 flex items-center justify-between border-b border-border/70 pb-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-warning/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-success/70" />
           </div>
-          <span className="rounded-full bg-success/15 px-2.5 py-1 text-[10px] font-bold text-success ring-1 ring-inset ring-success/25">
-            ATS OK ✓
+          <span className="rounded-md bg-primary-50 px-2 py-0.5 text-[10px] font-bold text-primary">
+            Template ATS · Foto Kiri Atas
           </span>
         </div>
 
-        {/* Ringkasan */}
-        <div className="mt-4 space-y-1.5">
-          <div className="h-2 w-full rounded-full bg-muted" />
-          <div className="h-2 w-5/6 rounded-full bg-muted" />
-          <div className="h-2 w-2/3 rounded-full bg-muted" />
+        {/* Header CV: Foto di sisi kiri pojok atas 3x4 + Teks di kanan */}
+        <div className="flex items-start gap-4 border-b border-gray-300 pb-3">
+          <div className="w-16 h-20 rounded border border-gray-300 bg-gray-100 flex items-center justify-center text-[9px] font-bold text-gray-400 shrink-0 shadow-xs">
+            FOTO 3×4
+          </div>
+          <div className="min-w-0 flex-1 pt-0.5">
+            <p className="text-base font-extrabold text-foreground">Budi Santoso, S.Kom</p>
+            <p className="text-xs font-semibold text-primary">Software Engineer</p>
+            <p className="text-[10px] text-muted-fg mt-1">budi@example.com · +62 812-3456-7890 · Jakarta</p>
+          </div>
         </div>
 
-        {/* Pengalaman — baris checklist */}
-        <div className="mt-4 space-y-2">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-fg">
-            Pengalaman
+        {/* Body Section ATS */}
+        <div className="mt-4 space-y-2.5 text-left">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-fg border-b border-gray-200 pb-0.5">
+            PENGALAMAN KERJA
           </p>
-          {['PT Nusantara Digital — Frontend Developer', 'Freelance — Web Designer'].map((job) => (
-            <div
-              key={job}
-              className="flex items-center gap-2 rounded-lg bg-primary-50/60 px-2.5 py-2"
-            >
-              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-cta-gradient">
-                <CheckCircle size={11} weight="bold" className="text-white" />
-              </span>
-              <span className="truncate text-[11px] font-semibold text-foreground">{job}</span>
+          <div className="space-y-1">
+            <div className="flex justify-between text-xs font-bold text-gray-800">
+              <span>Frontend Developer — PT Inovasi Digital</span>
+              <span className="text-[10px] font-normal text-muted-fg">2022 — Sekarang</span>
             </div>
-          ))}
+            <div className="h-1.5 w-full rounded-full bg-muted" />
+            <div className="h-1.5 w-4/5 rounded-full bg-muted" />
+          </div>
+
+          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-fg border-b border-gray-200 pb-0.5 pt-1">
+            KEAHLIAN UTAMA
+          </p>
+          <p className="text-[10px] text-gray-700">
+            JavaScript • TypeScript • React.js • Node.js • Tailwind CSS • REST API
+          </p>
         </div>
 
-        {/* Footer card */}
         <div className="mt-4 flex items-center justify-between border-t border-border/70 pt-3">
-          <span className="flex items-center gap-1 text-[10px] font-semibold text-muted-fg">
-            <FilePdf size={13} className="text-destructive" /> PDF HQ
+          <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600">
+            <CheckCircle size={14} weight="bold" /> Standar ATS 100% Lulus
           </span>
-          <span className="rounded-lg bg-accent/10 px-2.5 py-1 text-[11px] font-extrabold text-accent ring-1 ring-inset ring-accent/20">
-            Rp2.000
+          <span className="flex items-center gap-1 text-[10px] font-semibold text-muted-fg">
+            <FilePdf size={13} className="text-destructive" /> PDF Berkualitas Tinggi
           </span>
         </div>
       </div>
@@ -122,42 +108,38 @@ function HeroMockup() {
         className="absolute -left-4 -top-8 flex items-center gap-3 rounded-2xl bg-white p-3 pr-4 shadow-lg ring-1 ring-black/5 sm:-left-10"
       >
         <div className="relative grid h-14 w-14 place-items-center">
-          {/* Ring conic-gradient (zero SVG): nilai 94%, track abu */}
           <div
             className="absolute inset-0 rounded-full"
-            style={{ background: 'conic-gradient(var(--color-primary) 0% 94%, #E9EFF8 94% 100%)' }}
+            style={{ background: 'conic-gradient(var(--color-primary) 0% 98%, #E9EFF8 98% 100%)' }}
             aria-hidden
           />
           <div className="absolute inset-[6px] rounded-full bg-white" aria-hidden />
-          <span className="relative text-sm font-extrabold text-primary">94</span>
+          <span className="relative text-sm font-extrabold text-primary">98%</span>
         </div>
         <div>
           <p className="text-xs font-extrabold text-foreground">ATS Score</p>
-          <p className="text-[10px] font-semibold text-success">Sangat baik</p>
+          <p className="text-[10px] font-semibold text-success">Lolos Verifikasi Mesin</p>
         </div>
       </motion.div>
 
-      {/* Floating card — Plagiarism */}
+      {/* Floating card — Cloudinary */}
       <motion.div
         {...float}
         transition={reduced ? undefined : { duration: 6.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
         className="absolute -bottom-6 -right-3 flex items-center gap-2.5 rounded-2xl bg-white p-3 pr-4 shadow-lg ring-1 ring-black/5 sm:-right-8"
       >
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-success/15 text-success">
-          <ShieldCheck size={20} weight="bold" />
+        <span className="grid h-10 w-10 place-items-center rounded-xl bg-blue-500/15 text-primary">
+          <CloudCheck size={20} weight="bold" />
         </span>
         <div>
-          <p className="text-xs font-extrabold text-foreground">Kemiripan 3%</p>
-          <p className="text-[10px] font-semibold text-success">Orisinal — lolos cek</p>
+          <p className="text-xs font-extrabold text-foreground">Foto Cloudinary CDN</p>
+          <p className="text-[10px] font-semibold text-primary">Penyimpanan Aman & Cepat</p>
         </div>
       </motion.div>
     </div>
   );
 }
 
-/* ---------------------------------------------------------------------------
-   BentoCard — kartu bento grid (Apple-style: radius besar, hover scale)
---------------------------------------------------------------------------- */
 function BentoCard({ className = '', icon: Icon, title, desc, children }) {
   const reduced = useReducedMotion();
   return (
@@ -176,23 +158,21 @@ function BentoCard({ className = '', icon: Icon, title, desc, children }) {
   );
 }
 
-/* ---------------------------------------------------------------------------
-   Halaman Landing
---------------------------------------------------------------------------- */
 export default function Landing() {
   const reduced = useReducedMotion();
-  // SEO fase 09: title/description eksplisit (sama dengan default index.html,
-  // ditulis ulang agar konsisten saat navigasi client-side).
+
   usePageMeta({
-    title: 'resufy — CV ATS, Cek Plagiarisme & Toolbox Gratis',
+    title: 'HireUp — Pembuat CV Standar ATS Profesional',
     description:
-      'Buat CV yang lolos ATS, cek plagiarisme dokumen, dan pakai toolbox gratis (compress, parafrase teks, cek teks AI). Cek gratis, bayar Rp2.000 hanya saat unduh PDF berkualitas tinggi.',
+      'Buat CV yang lulus standar ATS dengan HireUp. Tersedia 2 template: dengan foto formal di sisi kiri pojok atas atau template klasik tanpa foto. Dilengkapi skor ATS realtime & unduh PDF gratis.',
   });
+
   const fade = (delay = 0) => ({
     initial: reduced ? { opacity: 0 } : { opacity: 0, y: 18 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.5, delay },
   });
+
   const stagger = (base = 0) => ({
     initial: reduced ? { opacity: 0 } : { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
@@ -204,7 +184,6 @@ export default function Landing() {
     <PublicLayout>
       {/* ============================ HERO ============================ */}
       <section className="relative overflow-hidden pb-24 pt-10 md:pt-16">
-        {/* Background: gradient lembut + grid + blobs */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary-50/80 via-white to-white" aria-hidden />
         <div className="bg-grid-light absolute inset-0 opacity-60" aria-hidden />
         <div className="blob -left-24 top-8 h-80 w-80 bg-primary/15" aria-hidden />
@@ -214,31 +193,30 @@ export default function Landing() {
           <motion.div {...fade(0)}>
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm backdrop-blur">
               <Sparkle size={14} weight="fill" className="text-accent" aria-hidden />
-              Gratis daftar · Toolbox gratis · Bayar hanya saat unduh PDF HQ
+              2 Template ATS Standar · Dengan Foto & Tanpa Foto · PDF Siap Cetak
             </span>
           </motion.div>
 
           <motion.h1
             {...fade(0.05)}
-            className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.08] tracking-tight text-foreground md:text-6xl"
+            className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.1] tracking-tight text-foreground md:text-6xl"
           >
-            CV yang <span className="text-gradient">diterima ATS</span>, naskah yang{' '}
-            <span className="text-gradient">terbukti orisinal</span>.
+            Buat CV Standar ATS yang <span className="text-gradient">Lolos Seleksi Kerja</span>.
           </motion.h1>
 
           <motion.p {...fade(0.1)} className="mt-5 max-w-xl text-balance text-base text-muted-fg md:text-lg">
-            {COPY.heroSub}
+            Fokus pada layouting dan kerapihan tanpa desain berlebihan. Dibuat sesuai kaidah sistem pelacak pelamar (ATS) agar data kamu terbaca sempurna oleh rekruter.
           </motion.p>
 
           <motion.div {...fade(0.15)} className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
             <Link to="/register">
-              <Button variant="primary" size="lg" icon={ArrowRight}>
-                Mulai Gratis
+              <Button variant="accent" size="lg" icon={ArrowRight}>
+                Mulai Buat CV Gratis
               </Button>
             </Link>
-            <Link to="/app/toolbox">
+            <Link to="/login">
               <Button variant="secondary" size="lg">
-                Coba Toolbox Gratis
+                Masuk ke Akun
               </Button>
             </Link>
           </motion.div>
@@ -248,15 +226,14 @@ export default function Landing() {
               <FloppyDisk size={14} className="text-primary" aria-hidden /> Tersimpan otomatis
             </span>
             <span className="flex items-center gap-1.5">
-              <Bank size={14} className="text-primary" aria-hidden /> Bayar via Midtrans
+              <CloudCheck size={14} className="text-primary" aria-hidden /> Cloudinary Cloud CDN
             </span>
             <span className="flex items-center gap-1.5">
-              <LockKey size={14} className="text-primary" aria-hidden /> Tanpa kartu saat daftar
+              <CheckCircle size={14} className="text-primary" aria-hidden /> Lulus ATS Parser
             </span>
           </motion.div>
         </div>
 
-        {/* Visual produk */}
         <motion.div
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -267,298 +244,169 @@ export default function Landing() {
       </section>
 
       {/* ============================ STATS ============================ */}
-      <section className="cv-auto relative -mt-8 pb-10" aria-label="Angka resufy">
+      <section className="cv-auto relative -mt-8 pb-10" aria-label="Statistik HireUp">
         <motion.div {...stagger(0)} className="mx-auto grid max-w-4xl grid-cols-2 gap-6 rounded-2xl border border-border bg-surface px-6 py-8 shadow-lg ring-1 ring-black/5 md:grid-cols-4 md:gap-4">
-          <StatNumber value={10000} suffix="+" label="dokumen dibuat & diunduh" />
-          <StatNumber value={2000} prefix="Rp" label="harga tetap per unduh HQ" />
-          <StatNumber value={3} label="modul dalam satu akun" />
-          <StatNumber value={4} label="alat toolbox gratis" />
+          <StatNumber value={100} suffix="%" label="Standar Format ATS" />
+          <StatNumber value={2} label="Pilihan Template ATS" />
+          <StatNumber value={0} prefix="Rp" label="Gratis Buat & Unduh" />
+          <StatNumber value={10000} suffix="+" label="CV Telah Digenerate" />
         </motion.div>
       </section>
 
-      {/* ============================ FITUR (BENTO) ============================ */}
+      {/* ============================ FITUR UTAMA ============================ */}
       <section className="cv-auto py-14" aria-labelledby="fitur-title">
         <motion.div {...stagger(0)} className="mb-10 text-center">
           <Badge tone="info" icon={Sparkle}>
-            FITUR
+            TEMPLATE & LAYOUT
           </Badge>
           <h2 id="fitur-title" className="mt-3 text-balance text-3xl font-extrabold text-foreground md:text-4xl">
-            Satu akun untuk semua kebutuhan dokumen kamu
+            2 Template Khusus Lolos Standar ATS
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-muted-fg md:text-base">
-            Tiga modul yang saling melengkapi — tanpa biaya langganan, tanpa kejutan.
+            Tanpa ornamen berlebihan yang mengacaukan scanner mesin pencari kerja. Cukup layouting presisi, kerapihan, dan tipografi standar.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-          {/* Card besar — CV ATS */}
-          <motion.div {...stagger(0.05)} className="md:col-span-7">
+          {/* Card 1 — Dengan Foto (Kiri Atas) */}
+          <motion.div {...stagger(0.05)} className="md:col-span-6">
             <BentoCard
-              icon={FileText}
-              title="CV ATS-Ready"
-              desc="Format satu kolom, rapi, dan mudah dibaca mesin rekruter — lengkap dengan skor & rekomendasi perbaikan secara langsung."
+              icon={UserSquare}
+              title="Template 1: CV Dengan Foto (Pojok Kiri Atas)"
+              desc="Posisi foto formal 3×4 diletakkan di sisi kiri pojok atas dengan nama dan informasi kontak di sebelah kanannya. Dilanjutkan layout 1 kolom rapi."
               className="h-full"
             >
-              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {[
-                  ['Struktur standar rekruter', 'Ringkasan, pengalaman, pendidikan'],
-                  ['Skor ATS langsung', 'Cek berkali-kali, gratis'],
-                ].map(([t, d]) => (
-                  <div key={t} className="rounded-xl bg-primary-50/70 p-3.5">
-                    <p className="flex items-center gap-1.5 text-xs font-bold text-primary">
-                      <CheckCircle size={14} weight="bold" aria-hidden /> {t}
-                    </p>
-                    <p className="mt-1 text-xs text-muted-fg">{d}</p>
-                  </div>
-                ))}
-              </div>
-            </BentoCard>
-          </motion.div>
-
-          {/* Card — Plagiarism */}
-          <motion.div {...stagger(0.1)} className="md:col-span-5">
-            <BentoCard
-              icon={Copy}
-              title="Cek Plagiarisme"
-              desc="Pastikan naskahmu orisinal sebelum dikirim. Lihat sumber kemiripan satu per satu."
-              className="h-full"
-            >
-              <div className="mt-5 flex items-end gap-1.5" aria-hidden>
-                {[18, 40, 26, 62, 34, 8].map((h, i) => (
-                  <div
-                    key={i}
-                    className={`w-3 rounded-t-md ${i === 3 ? 'bg-accent/70' : 'bg-primary/25'}`}
-                    style={{ height: `${Math.max(h / 1.4, 8)}px` }}
-                  />
-                ))}
-                <span className="ml-1 rounded-md bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success ring-1 ring-inset ring-success/25">
-                  3% kemiripan
-                </span>
-              </div>
-            </BentoCard>
-          </motion.div>
-
-          {/* Card — Toolbox */}
-          <motion.div {...stagger(0.05)} className="md:col-span-5">
-            <BentoCard
-              icon={Wrench}
-              title="Toolbox Gratis"
-              desc="Utilitas dokumen tanpa perlu akun — kompres, parafrase teks dengan AI, dan cek teks AI."
-              className="h-full"
-            >
-              <div className="mt-5 flex gap-2.5">
-                {[FilePdf, TextAa, Brain].map((T, i) => (
-                  <span
-                    key={i}
-                    className="grid h-10 w-10 place-items-center rounded-xl bg-muted text-muted-fg ring-1 ring-inset ring-border transition-colors group-hover:bg-primary-50 group-hover:text-primary"
-                  >
-                    <T size={18} weight="bold" aria-hidden />
-                  </span>
-                ))}
-              </div>
-            </BentoCard>
-          </motion.div>
-
-          {/* Card besar — Payment */}
-          <motion.div {...stagger(0.1)} className="md:col-span-7">
-            <BentoCard
-              icon={ShieldCheck}
-              title="Satu harga jujur — Rp2.000"
-              desc="Gunakan semua fitur gratis tanpa batas. Bayar sekali hanya saat kamu benar-benar ingin mengunduh PDF berkualitas tinggi. Dokumen final tersimpan permanen di akunmu."
-              className="h-full"
-            >
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                <PriceTag className="items-start" />
-                <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-fg">
-                  <span className="rounded-full bg-success/15 px-3 py-1.5 text-success ring-1 ring-inset ring-success/25">
-                    Tanpa langganan
-                  </span>
-                  <span className="rounded-full bg-success/15 px-3 py-1.5 text-success ring-1 ring-inset ring-success/25">
-                    Unduh ulang kapan saja
-                  </span>
+              <div className="mt-5 space-y-2">
+                <div className="rounded-xl bg-primary-50/70 p-3.5">
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-primary">
+                    <CheckCircle size={14} weight="bold" /> Foto Proporsional 3×4
+                  </p>
+                  <p className="mt-1 text-xs text-muted-fg">
+                    Crop & resize otomatis dan tersimpan aman di Cloudinary CDN.
+                  </p>
+                </div>
+                <div className="rounded-xl bg-primary-50/70 p-3.5">
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-primary">
+                    <CheckCircle size={14} weight="bold" /> Tata Letak Rapi & Sejajar
+                  </p>
+                  <p className="mt-1 text-xs text-muted-fg">
+                    Nama dan kontak terstruktur rapi di samping foto tanpa memotong alur bacaan ATS.
+                  </p>
                 </div>
               </div>
             </BentoCard>
           </motion.div>
+
+          {/* Card 2 — Tanpa Foto */}
+          <motion.div {...stagger(0.1)} className="md:col-span-6">
+            <BentoCard
+              icon={FileText}
+              title="Template 2: CV Tanpa Foto (Standar Klasik)"
+              desc="Layout 1 kolom penuh tanpa foto, pilihan standar internasional yang paling aman dan disukai oleh semua sistem ATS perusahaan multinasional."
+              className="h-full"
+            >
+              <div className="mt-5 space-y-2">
+                <div className="rounded-xl bg-indigo-50/70 p-3.5">
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-indigo-700">
+                    <CheckCircle size={14} weight="bold" /> 1 Kolom Penuh (Single Column)
+                  </p>
+                  <p className="mt-1 text-xs text-muted-fg">
+                    Menghilangkan risiko salah urutan pembacaan teks pada sistem parser ATS.
+                  </p>
+                </div>
+                <div className="rounded-xl bg-indigo-50/70 p-3.5">
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-indigo-700">
+                    <CheckCircle size={14} weight="bold" /> Tipografi Helvetica ATS-Friendly
+                  </p>
+                  <p className="mt-1 text-xs text-muted-fg">
+                    Kombinasi font universal standar industri tanpa elemen dekoratif berlebih.
+                  </p>
+                </div>
+              </div>
+            </BentoCard>
+          </motion.div>
+
+          {/* Card 3 — ATS Score */}
+          <motion.div {...stagger(0.15)} className="md:col-span-6">
+            <BentoCard
+              icon={ShieldCheck}
+              title="Pemeriksaan Skor ATS Instan"
+              desc="Ketahui skor kelayakan CV kamu sebelum dikirim ke HRD. Dapatkan feedback langsung untuk bagian yang perlu disempurnakan."
+              className="h-full"
+            />
+          </motion.div>
+
+          {/* Card 4 — Cloudinary Storage */}
+          <motion.div {...stagger(0.2)} className="md:col-span-6">
+            <BentoCard
+              icon={CloudCheck}
+              title="Penyimpanan Cloudinary Terintegrasi"
+              desc="Foto profil diunggah langsung ke Cloudinary menggunakan cloud storage resmi, aman, dan berkecepatan tinggi."
+              className="h-full"
+            />
+          </motion.div>
         </div>
       </section>
 
-      {/* ============================ CARA KERJA ============================ */}
+      {/* ============================ 3 LANGKAH ============================ */}
       <section className="cv-auto py-14" aria-labelledby="cara-title">
         <motion.div {...stagger(0)} className="mb-10 text-center">
           <Badge tone="info" icon={Sparkle}>
             CARA KERJA
           </Badge>
           <h2 id="cara-title" className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
-            Dari nol sampai PDF HQ dalam 3 langkah
+            Langkah Mudah Membuat CV ATS
           </h2>
         </motion.div>
 
         <ol className="relative grid gap-5 md:grid-cols-3">
           <motion.li {...stagger(0.05)} className="relative">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
+            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm hover:shadow-md transition-shadow">
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-cta-gradient font-extrabold text-white shadow-glow-primary">
                 01
               </span>
-              <h3 className="mt-4 text-lg font-bold text-foreground">Buat dokumen</h3>
-              <p className="mt-1.5 text-sm text-muted-fg">Isi CV lewat form bertahap atau unggah file.</p>
+              <h3 className="mt-4 text-lg font-bold text-foreground">Pilih Template</h3>
+              <p className="mt-1.5 text-sm text-muted-fg">Pilih template dengan foto (sisi kiri pojok atas) atau template tanpa foto.</p>
             </div>
           </motion.li>
           <motion.li {...stagger(0.1)} className="relative">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
+            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm hover:shadow-md transition-shadow">
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-cta-gradient font-extrabold text-white shadow-glow-primary">
                 02
               </span>
-              <h3 className="mt-4 text-lg font-bold text-foreground">Preview & cek</h3>
-              <p className="mt-1.5 text-sm text-muted-fg">
-                Lihat pratinjau ber-watermark + skor ATS langsung.
-              </p>
+              <h3 className="mt-4 text-lg font-bold text-foreground">Lengkapi Data & Cek ATS</h3>
+              <p className="mt-1.5 text-sm text-muted-fg">Isi pengalaman, pendidikan, dan keahlian, lalu cek skor kelulusan ATS kamu.</p>
             </div>
           </motion.li>
           <motion.li {...stagger(0.15)} className="relative">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
+            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm hover:shadow-md transition-shadow">
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-cta-gradient font-extrabold text-white shadow-glow-primary">
                 03
               </span>
-              <h3 className="mt-4 text-lg font-bold text-foreground">Bayar & unduh HQ</h3>
-              <p className="mt-1.5 text-sm text-muted-fg">{COPY.onceOnly}</p>
+              <h3 className="mt-4 text-lg font-bold text-foreground">Unduh PDF Siap Kirim</h3>
+              <p className="mt-1.5 text-sm text-muted-fg">Dapatkan dokumen PDF berkualitas tinggi tanpa watermark, langsung siap dilamar.</p>
             </div>
           </motion.li>
         </ol>
       </section>
 
-      {/* ============================ TESTIMONIAL ============================ */}
-      <section className="cv-auto py-14" aria-labelledby="testi-title">
-        <motion.div {...stagger(0)} className="mb-10 text-center">
-          <Badge tone="info" icon={Star}>
-            KATA MEREKA
-          </Badge>
-          <h2 id="testi-title" className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
-            Dipercaya pelamar kerja Indonesia
+      {/* ============================ CTA ============================ */}
+      <section className="cv-auto py-16 text-center">
+        <div className="rounded-3xl border border-primary/20 bg-gradient-to-br from-primary-50 via-surface to-indigo-50 p-8 sm:p-14 shadow-md">
+          <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
+            Siap Melamar Pekerjaan Impianmu?
           </h2>
-        </motion.div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            {
-              name: 'Rina Wulandari',
-              role: 'Fresh Graduate · Jakarta',
-              text: 'Lamaran pertamaku tembus screening ATS setelah pakai resufy. Skor 94 langsung bikin pede.',
-              initials: 'RW',
-            },
-            {
-              name: 'Bagus Pratama',
-              role: 'Content Writer · Yogyakarta',
-              text: 'Cek plagiarisme-nya lengkap sampai daftar sumber. Harga Rp2.000 terasa sangat wajar.',
-              initials: 'BP',
-            },
-            {
-              name: 'Dewi Lestari',
-              role: 'HR Assistant · Bandung',
-              text: 'Toolbox-nya gratis dan cepat. Kompres PDF untuk kirim lampiran jadi nggak ribet.',
-              initials: 'DL',
-            },
-          ].map((t, i) => (
-            <motion.figure
-              key={t.name}
-              {...stagger(0.05 + i * 0.05)}
-              className="flex flex-col rounded-2xl border border-border bg-surface p-6 shadow-sm transition-shadow duration-200 hover:shadow-md"
-            >
-              <div className="flex gap-0.5 text-warning" aria-label="5 dari 5">
-                {Array.from({ length: 5 }).map((_, s) => (
-                  <Star key={s} size={14} weight="fill" aria-hidden />
-                ))}
-              </div>
-              <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-foreground">
-                “{t.text}”
-              </blockquote>
-              <figcaption className="mt-5 flex items-center gap-3 border-t border-border/70 pt-4">
-                <span className="grid h-10 w-10 place-items-center rounded-full bg-cta-gradient text-xs font-bold text-white ring-2 ring-white">
-                  {t.initials}
-                </span>
-                <div>
-                  <p className="text-sm font-bold text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-fg">{t.role}</p>
-                </div>
-              </figcaption>
-            </motion.figure>
-          ))}
-        </div>
-      </section>
-
-      {/* ============================ PRICING ============================ */}
-      <section className="cv-auto py-14" aria-labelledby="harga-title">
-        <motion.div {...stagger(0)} className="mx-auto max-w-md">
-          <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-white p-8 text-center shadow-xl ring-1 ring-black/5">
-            <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-primary via-indigo-500 to-accent" aria-hidden />
-            <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent ring-1 ring-inset ring-accent/25">
-              SEKALI BAYAR · TANPA LANGGANAN
-            </span>
-            <h2 id="harga-title" className="mt-4 text-2xl font-extrabold text-foreground">
-              Unduh PDF kualitas tinggi
-            </h2>
-            <div className="mt-4 flex items-end justify-center gap-1">
-              <span className="text-6xl font-extrabold tabular-nums tracking-tight text-accent drop-shadow-sm">
-                Rp2.000
-              </span>
-              <span className="pb-2 text-sm font-semibold text-muted-fg">/dokumen</span>
-            </div>
-            <ul className="mt-6 space-y-2.5 text-left text-sm">
-              {[
-                'Semua fitur gratis tanpa batas',
-                'Preview PDF ber-watermark gratis',
-                'PDF final berkualitas tinggi, sekali bayar',
-                'Invoice otomatis + unduh ulang kapan saja',
-                'Pembayaran aman via Midtrans',
-              ].map((b) => (
-                <li key={b} className="flex items-start gap-2">
-                  <CheckCircle size={18} weight="bold" className="mt-0.5 shrink-0 text-success" aria-hidden />
-                  <span className="text-foreground">{b}</span>
-                </li>
-              ))}
-            </ul>
-            <Link to="/register" className="mt-7 block">
-              <Button variant="primary" size="lg" className="w-full" icon={ArrowRight}>
-                Mulai Gratis Sekarang
-              </Button>
-            </Link>
-            <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-fg">
-              <Quotes size={13} aria-hidden /> Tanpa kartu kredit saat daftar
-            </p>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ============================ CTA AKHIR ============================ */}
-      <section className="cv-auto pb-20 pt-6">
-        <motion.div {...stagger(0)} className="relative overflow-hidden rounded-3xl bg-panel-gradient px-6 py-14 text-center text-white shadow-xl md:px-12">
-          <div className="bg-grid absolute inset-0 opacity-40" aria-hidden />
-          <div className="blob -left-16 -top-20 h-72 w-72 bg-primary-500/40" aria-hidden />
-          <div className="blob -bottom-24 -right-10 h-72 w-72 bg-indigo-400/30" aria-hidden />
-
-          <div className="relative">
-            <h2 className="mx-auto max-w-2xl text-balance text-3xl font-extrabold md:text-4xl">
-              Siap membuat CV yang benar-benar lolos saringan ATS?
-            </h2>
-            <p className="mx-auto mt-4 max-w-md text-sm text-white/80 md:text-base">
-              Daftar gratis, lengkapi CV, cek ATS & plagiarisme tanpa biaya. Bayar sekali —
-              Rp2.000 — saat kamu yakin mau unduh versi final.
-            </p>
-            <Link to="/register" className="mt-8 inline-block">
+          <p className="mx-auto mt-3 max-w-lg text-sm text-muted-fg sm:text-base">
+            Buat CV ATS profesional sekarang juga. Pilih template yang kamu suka dan unduh hasilnya secara instan.
+          </p>
+          <div className="mt-8 flex justify-center">
+            <Link to="/register">
               <Button variant="accent" size="lg" icon={ArrowRight}>
-                Buat CV Pertamamu
+                Buat CV Sekarang — Gratis
               </Button>
             </Link>
-            <p className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/70">
-              <span className="flex items-center gap-1.5">
-                <FloppyDisk size={13} aria-hidden /> Dokumen tersimpan otomatis di akunmu.
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle size={13} aria-hidden /> Tanpa kartu kredit saat daftar.
-              </span>
-            </p>
           </div>
-        </motion.div>
+        </div>
       </section>
     </PublicLayout>
   );

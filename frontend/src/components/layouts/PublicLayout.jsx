@@ -29,6 +29,8 @@ const AUTHED_ACCOUNT_LINKS = [{ label: 'Dashboard', to: '/app' }];
  * loading → placeholder skeleton (anti kedip); user → tombol "Dashboard" +
  * nama depan (desktop); guest → "Masuk" + "Daftar Gratis".
  */
+import { Logo } from '../ui/Logo';
+
 export function PublicLayout({ navItems = [], cta = null, children }) {
   const { user, loading } = useAuth();
 
@@ -38,12 +40,7 @@ export function PublicLayout({ navItems = [], cta = null, children }) {
     <div className="min-h-dvh bg-bg">
       <header className="sticky top-0 z-40 border-b border-border/70 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
-          <Link to="/" className="group flex items-center gap-2" aria-label="resufy — beranda">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-cta-gradient text-white shadow-glow-primary transition-transform duration-200 group-hover:scale-105">
-              <Sparkle size={18} weight="bold" aria-hidden />
-            </span>
-            <span className="text-lg font-extrabold tracking-tight text-foreground">resufy</span>
-          </Link>
+          <Logo to="/" size="md" showTagline />
 
           {navItems.length > 0 && (
             <nav aria-label="Navigasi utama" className="hidden items-center gap-1 md:flex">
@@ -107,12 +104,7 @@ export function PublicLayout({ navItems = [], cta = null, children }) {
           <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
             {/* Brand */}
             <div>
-              <Link to="/" className="flex items-center gap-2" aria-label="resufy — beranda">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-cta-gradient text-white shadow-glow-primary">
-                  <Sparkle size={18} weight="bold" aria-hidden />
-                </span>
-                <span className="text-lg font-extrabold tracking-tight text-foreground">resufy</span>
-              </Link>
+              <Logo to="/" size="md" />
               <p className="mt-3 max-w-xs text-sm text-muted-fg">
                 CV yang lolos saringan ATS & laporan plagiarisme — untuk pelamar kerja Indonesia.
               </p>
@@ -184,7 +176,7 @@ export function PublicLayout({ navItems = [], cta = null, children }) {
           {/* Bottom bar */}
           <div className="mt-10 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-muted-fg">
-              © {new Date().getFullYear()} resufy · Pay-per-print Rp2.000 · Tanpa langganan
+              © {new Date().getFullYear()} HireUp · Pembuat CV ATS Standar Profesional
             </p>
             <div className="flex items-center gap-4 text-xs">
               <a href="#" className="font-semibold text-muted-fg transition-colors hover:text-primary">

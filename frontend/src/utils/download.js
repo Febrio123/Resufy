@@ -5,7 +5,7 @@
  */
 
 /** Parse nama file dari Content-Disposition (filename* UTF-8 → fallback). */
-export function filenameFromDisposition(header, fallback = 'resufy_output') {
+export function filenameFromDisposition(header, fallback = 'hireup_output') {
   if (!header) return fallback;
   const star = /filename\*=UTF-8''([^;]+)/i.exec(header);
   if (star) {
@@ -27,7 +27,7 @@ export function filenameFromDisposition(header, fallback = 'resufy_output') {
  * Guard: `response.data` bukan Blob → lempar error jelas; caller menangkapnya
  * via extractErrorMessage (error.message generik tetap dirender ke toast).
  */
-export function downloadBlob(response, fallbackName = 'resufy_output') {
+export function downloadBlob(response, fallbackName = 'hireup_output') {
   if (!response?.data || typeof Blob === 'undefined' || !(response.data instanceof Blob)) {
     throw new Error('Hasil unduhan tidak valid — coba lagi.');
   }

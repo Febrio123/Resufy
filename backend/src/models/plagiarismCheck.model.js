@@ -105,18 +105,10 @@ const plagiarismCheckSchema = new mongoose.Schema(
     scannedSegments: { type: Number, default: null }, // jumlah segmen yang benar-benar di-query SerpApi
     scanMode: { type: String, enum: ['sample', 'full'], default: null }, // 'full' = scan penuh; 'sample' = hanya sampling
     errorMessage: { type: String, default: null }, // SELALU terisi saat failed (kontrak UI)
-    paidStatus: {
-      type: String,
-      enum: ['unpaid', 'paid'],
-      default: 'unpaid',
-    },
-    paidAt: { type: Date, default: null },
     files: {
       type: {
-        previewPdfUrl: { type: String, default: null },
-        previewPdfPublicId: { type: String, default: null }, // utk signed URL segar
-        finalPdfUrl: { type: String, default: null },
-        finalPdfPublicId: { type: String, default: null }, // utk signed URL segar
+        pdfUrl: { type: String, default: null },
+        pdfPublicId: { type: String, default: null }, // utk signed URL segar
         _id: false,
       },
       default: () => ({}),
@@ -136,12 +128,7 @@ const plagiarismCheckSchema = new mongoose.Schema(
 
 // Index sesuai desain
 plagiarismCheckSchema.index({ userId: 1, createdAt: -1 });
-plagiarismCheckSchema.index({ userId: 1, paidStatus: 1 });
 plagiarismCheckSchema.index({ status: 1 }); // worker polling / recovery job mati
-
-plagiarismCheckSchema.methods.isPaid = function isPaid() {
-  return this.paidStatus === 'paid';
-};
 
 plagiarismCheckSchema.methods.toSafeJSON = function toSafeJSON() {
   return this.toJSON();

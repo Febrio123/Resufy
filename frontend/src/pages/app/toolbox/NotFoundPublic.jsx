@@ -7,8 +7,8 @@ export function NotFoundPublic() {
   const navigate = useNavigate();
   // SEO fase 09
   usePageMeta({
-    title: 'Alat tidak ditemukan — resufy',
-    description: 'Toolbox yang kamu cari tidak ada. Lihat daftar alat resufy yang tersedia.',
+    title: 'Alat tidak ditemukan — HireUp',
+    description: 'Toolbox yang kamu cari tidak ada. Lihat daftar alat HireUp yang tersedia.',
   });
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 py-16 text-center">

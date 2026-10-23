@@ -1,9 +1,9 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle, FileText, SignOut, Sparkle, SquaresFour, Wrench } from '@phosphor-icons/react';
+import { FileText, PlusCircle, SignOut, Sparkle, SquaresFour, User } from '@phosphor-icons/react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Avatar } from '../ui/Avatar';
-import { Badge } from '../ui/Badge';
+import { Logo } from '../ui/Logo';
 
 const NAV_ITEMS = [
   {
@@ -19,25 +19,22 @@ const NAV_ITEMS = [
     end: false,
   },
   {
-    to: '/app/plagiarism',
-    label: 'Cek Plagiarisme',
-    icon: CheckCircle,
+    to: '/app/cvs/new',
+    label: 'Buat CV Baru',
+    icon: PlusCircle,
     end: false,
   },
   {
-    to: '/app/toolbox',
-    label: 'Toolbox',
-    icon: Wrench,
-    badge: 'Gratis',
-    public: true,
+    to: '/app/account',
+    label: 'Pengaturan Akun',
+    icon: User,
     end: false,
   },
 ];
 
 /**
- * AppLayout — shell aplikasi. Soft UI overhaul:
- * Sidebar premium (icon container gradient + active pill + indicator bar),
- * bottom nav mobile dengan pill aktif. Toolbox PUBLIC tetap di dalam AppLayout.
+ * AppLayout — Shell aplikasi CV Maker ATS.
+ * Fokus 100% pada pembuatan & pengelolaan CV standar ATS.
  */
 export function AppLayout() {
   const { user, logout } = useAuth();
@@ -71,7 +68,7 @@ export function AppLayout() {
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary-100">
             <SignOut size={16} aria-hidden />
           </span>
-          Masuk untuk menyimpan hasil
+          Masuk Akun
         </NavLink>
       )}
     </div>
@@ -82,10 +79,10 @@ export function AppLayout() {
       <Avatar name={user?.name || 'U'} />
       <div className="min-w-0">
         <p className="truncate text-sm font-bold text-foreground">
-          {user?.name || 'Pengguna Tamu'}
+          {user?.name || 'Pengguna'}
         </p>
         <p className="truncate text-xs text-muted-fg">
-          {user?.email || 'Toolbox dapat dipakai tanpa akun'}
+          {user?.email || ''}
         </p>
       </div>
     </div>
@@ -95,11 +92,8 @@ export function AppLayout() {
     <div className="flex min-h-dvh bg-bg">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-border bg-surface lg:flex">
-        <div className="flex h-16 items-center gap-2 border-b border-border px-5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-cta-gradient text-white shadow-glow-primary">
-            <Sparkle size={18} weight="bold" aria-hidden />
-          </span>
-          <span className="text-lg font-extrabold tracking-tight text-foreground">resufy</span>
+        <div className="flex h-16 items-center px-5 border-b border-border">
+          <Logo to="/app" size="md" showTagline />
         </div>
         {userRow}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Navigasi aplikasi">
@@ -134,7 +128,6 @@ export function AppLayout() {
                     <item.icon size={18} weight={isActive ? 'bold' : 'regular'} aria-hidden />
                   </span>
                   <span className="flex-1">{item.label}</span>
-                  {item.badge && <Badge tone="gratis">{item.badge}</Badge>}
                 </>
               )}
             </NavLink>
@@ -147,12 +140,7 @@ export function AppLayout() {
       <div className="flex min-h-dvh w-full flex-col lg:pl-64">
         {/* Mobile top header */}
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border/70 bg-white/85 px-4 backdrop-blur-md lg:hidden">
-          <NavLink to="/app" className="flex items-center gap-2" aria-label="resufy — dashboard">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-cta-gradient text-white shadow-glow-primary">
-              <Sparkle size={16} weight="bold" aria-hidden />
-            </span>
-            <span className="font-extrabold tracking-tight text-foreground">resufy</span>
-          </NavLink>
+          <Logo to="/app" size="sm" />
           <NavLink
             to="/app/account"
             aria-label="Akun saya"
@@ -166,8 +154,9 @@ export function AppLayout() {
           <Outlet />
         </main>
 
-        <footer className="mx-auto w-full max-w-6xl px-4 pb-24 pt-6 text-xs text-muted-fg md:px-6 lg:pb-8">
-          © {new Date().getFullYear()} resufy · Pay-per-print Rp2.000 · Tanpa langganan
+        <footer className="mx-auto w-full max-w-6xl px-4 pb-24 pt-6 text-xs text-muted-fg md:px-6 lg:pb-8 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-border/40">
+          <span>© {new Date().getFullYear()} HireUp · Generator CV ATS Standar</span>
+          <span className="text-primary font-medium">Template dengan Foto (Pojok Kiri Atas) & Tanpa Foto</span>
         </footer>
       </div>
 
@@ -204,7 +193,7 @@ export function AppLayout() {
                   >
                     <item.icon size={20} weight={isActive ? 'bold' : 'regular'} aria-hidden />
                   </span>
-                  {item.label}
+                  <span className="truncate px-1">{item.label}</span>
                 </>
               )}
             </NavLink>
@@ -215,5 +204,4 @@ export function AppLayout() {
   );
 }
 
-// Gunakan ulang NAV_ITEMS di halaman yang butuh akses daftar tab
 export { NAV_ITEMS };

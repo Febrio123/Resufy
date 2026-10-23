@@ -10,6 +10,7 @@ const { z } = require('zod');
 
 // .env berada di DALAM folder backend (backend/.env), 2 tingkat di atas config/
 dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env') });
+if (!process.env.CLOUDINARY_API_SECRET && process.env.CLOUDINARY_SECRET_KEY) process.env.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_SECRET_KEY;
 
 const booleanFromString = z
   .enum(['true', 'false'])
@@ -42,18 +43,10 @@ const envSchema = z
     CLOUDINARY_API_SECRET: z.string().min(1),
     CLOUDINARY_FOLDER_PREFIX: z.string().default('resufy/'),
 
-    // E. Midtrans (pay-per-print Rp2.000)
-    MIDTRANS_SERVER_KEY: z.string().min(1),
-    MIDTRANS_CLIENT_KEY: z.string().min(1),
-    MIDTRANS_IS_PRODUCTION: booleanFromString,
-    MIDTRANS_SNAP_BASE_URL: z
-      .string()
-      .url()
-      .default('https://app.sandbox.midtrans.com/snap/v1/transactions'),
-    MIDTRANS_MERCHANT_ID: z.string().optional().default(''),
+    // E. Midtrans (pay-per-print Rp2.000) - Dihapus untuk model bisnis gratis penuh
 
     // F. Web Search API — SerpApi (keputusan fase 4 kickoff)
-    SERPAPI_API_KEY: z.string().min(1, 'SERPAPI_API_KEY wajib diisi (modul plagiarism)'),
+    SERPAPI_API_KEY: z.string().optional().default(''),
     SERPAPI_GL: z.string().default('id'),
     SERPAPI_HL: z.string().default('id'),
 
@@ -110,9 +103,6 @@ const env = parsed.data;
 if (env.NODE_ENV === 'production' && env.JWT_COOKIE_SECURE === false) {
   console.warn('⚠️ [config/env] NODE_ENV=production tapi JWT_COOKIE_SECURE=false — cookie tidak aman di prod.');
 }
-if (env.NODE_ENV === 'production' && env.MIDTRANS_IS_PRODUCTION === false) {
-  console.warn('⚠️ [config/env] NODE_ENV=production tapi MIDTRANS_IS_PRODUCTION=false — pembayaran masih SANDBOX.');
-}
 if (env.JWT_SECRET.length < 32) {
   console.warn('⚠️ [config/env] JWT_SECRET < 32 karakter — sebaiknya regenerate dengan secret lebih kuat.');
 }
@@ -138,7 +128,6 @@ const REFRESH_COOKIE_NAME = 'resufy_refresh';
 // CSRF cookie (double-submit token) — TIDAK httpOnly (JS frontend baca utk header).
 // SameSite=Lax dikunci bersama cookie auth (redirect balik Snap Midtrans butuh Lax).
 const CSRF_COOKIE_NAME = 'resufy_csrf';
-const PRICE_AMOUNT_IDR = 2000; // Rp2.000 per cetak PDF (keputusan final requirement)
 
 module.exports = {
   env,
@@ -147,5 +136,4 @@ module.exports = {
   AUTH_COOKIE_NAME,
   REFRESH_COOKIE_NAME,
   CSRF_COOKIE_NAME,
-  PRICE_AMOUNT_IDR,
 };
